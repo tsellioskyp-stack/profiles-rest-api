@@ -20,3 +20,11 @@ and then: (vagrant@ubuntu-bionic:/vagrant$)
 
 Now you are in e Virtual environment
 
+To start a DJANGO REST project, on (env)vagrant@ubuntu-bionic:/vagrant$:
+    django-admin.py startproject profiles_project .
+, which means:  django-admin.py -- Execute the script of creation
+                startproject -- Execute
+                profiles_project -- Name of new folder to be created, with new files in it created
+                . -- Dot means create the project at the ROOT of our current directory
+Then:
+    python manage.py startapp profiles_api
