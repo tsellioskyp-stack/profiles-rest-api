@@ -1,0 +1,22 @@
+How to setup a vagrant server: Install Virtual Box and vagrant
+In a directory, lets say project/, create through the git bash a Vagrantfile, as seen on this directory example
+on the bash:
+    vagrant up
+    ...
+    ...
+    vagrant ssh
+
+
+Now you are logged in the server. (vagrant@ubuntu-bionic:~)
+You can:
+    vagrant halt
+    vagrant destroy
+    exit
+
+To create a v-env in the vagrant server, do:
+    cd /vagrant/
+and then: (vagrant@ubuntu-bionic:/vagrant$)
+    source ~/env/bin/activate
+
+Now you are in e Virtual environment
+
