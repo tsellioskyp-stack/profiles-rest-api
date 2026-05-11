@@ -17,6 +17,10 @@ Vagrant.configure("2") do |config|
 
  config.vm.network "forwarded_port", guest: 8000, host: 8000
  config.vm.boot_timeout = 600  # or another higher value
+ config.vm.network "forwarded_port",
+  guest: 8000,
+  host: 8000,
+  auto_correct: true
 
  config.vm.provision "shell", inline: <<-SHELL
    systemctl disable apt-daily.service
