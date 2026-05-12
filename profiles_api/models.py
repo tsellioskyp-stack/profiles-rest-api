@@ -40,9 +40,10 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
+    phone_number = models.DecimalField(max_digits=15, decimal_places=0, default=0)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-
+    is_black = models.BooleanField(default=False)
     objects = UserProfileManager()
 
     USERNAME_FIELD = "email"
