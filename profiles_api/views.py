@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import reverse, status
+from rest_framework import viewsets
 
 from profiles_api import serializers
 
@@ -46,3 +47,22 @@ class HelloApiView(APIView):
         """Delete an object"""
         return Response({"method": "DELETE"})
         # Where the request is the data sent by the client, and pk is the primary key of the object to delete
+
+
+class HelloViewSet(viewsets.ViewSet):
+    # This is a viewset, and it does not use the APIView class, but it uses the ViewSet class from the rest_framework.viewsets module
+    # A custom HelloViewSet class is created, which inherits from the ViewSet class, and it is used to handle the HTTP methods
+    # for the APIView
+    """Test API ViewSet"""
+
+    # In contrast to APIView, which maps HTTP methods to functions, a ViewSet maps actions (list, create, retrieve, update, partial_update,
+    # destroy) to functions already defined in the ViewSet class, and we only need to define the functions for the actions we want to handle
+    def list(self, request):
+        """Return a hello message"""
+        a_viewset = [
+            "Uses actions (list, create, retrieve, update, partial_update)",
+            "Automatically maps to URLs using Routers",
+            "Provides more functionality with less code",
+        ]
+
+        return Response({"message": "Hello!", "a_viewset": a_viewset})
