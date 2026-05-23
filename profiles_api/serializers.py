@@ -22,3 +22,16 @@ class HelloSerializer(serializers.Serializer):
     #   means that the maximum length of the name can be 10 characters. If we try to input a name longer than 10 characters,
     # it will raise a validation error. This serializer will be used in our API view to validate the input data and serialize it
     # before sending it back in the response.
+
+    phone_number = serializers.CharField(
+        max_length=15,
+        validators=[
+            RegexValidator(
+                regex=r"^\+?1?\d{9,15}$",
+                message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.",
+            )
+        ],
+    )  # CharField for phone number, with a regex validator to ensure that the input is in the correct format. The regex pattern r"^\+?1?\d{9,15}$" means that the phone number can optionally start with a plus sign (+) and an optional country code (1), followed by 9 to 15 digits. If the input does not match this pattern, it will raise a validation error with the message "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."
+    is_active = serializers.BooleanField(
+        default=False
+    )  # A boolean field to indicate if the user is active or not. The default value is True, meaning that by default, all users will be considered active unless specified otherwise.

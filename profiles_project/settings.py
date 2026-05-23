@@ -57,7 +57,7 @@ ROOT_URLCONF = "profiles_project.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -121,6 +121,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = "/static/"
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+# This line tells Django where to look for static files, such as CSS and JavaScript files, in our project. By default, Django looks for static files in a directory called "static" within each app. However, since we have a custom directory for our static files in the profiles_api app, we need to specify that directory here. The os.path.join(BASE_DIR, "profiles_api/static/") line constructs the full path to the static files directory based on the BASE_DIR variable, which represents the root directory of our project. This allows Django to find and serve our static files correctly when we run the development server or deploy our application.
 
 # Custom user model
 AUTH_USER_MODEL = "profiles_api.UserProfile"

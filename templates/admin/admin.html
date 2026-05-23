@@ -1,0 +1,15 @@
+{% extends "rest_framework/admin.html" %}
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+
+<link rel="stylesheet" href="{% static 'css/admin_drf.css' %}">
+
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name" style="color:#39ff14;">
+    ⚡ Neon Admin Panel
+</h1>
+{% endblock %}

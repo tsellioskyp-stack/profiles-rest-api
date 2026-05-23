@@ -1,0 +1,21 @@
+{% extends "rest_framework/base.html" %}
+{% load static %}
+
+{% block bootstrap_theme %}
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
+{% endblock %}
+
+{% block style %}
+{{ block.super }}
+
+<link rel="stylesheet" href="{% static 'css/neon_drf.css' %}">
+
+<style>
+body {
+    background: #001a00 !important;
+}
+</style>
+
+
+{% endblock %}

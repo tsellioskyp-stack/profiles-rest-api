@@ -54,6 +54,9 @@ class HelloViewSet(viewsets.ViewSet):
     # A custom HelloViewSet class is created, which inherits from the ViewSet class, and it is used to handle the HTTP methods
     # for the APIView
     """Test API ViewSet"""
+    serializer_class = (
+        serializers.HelloSerializer
+    )  # THis creates a form in the webpage, a "window" to type in
 
     # In contrast to APIView, which maps HTTP methods to functions, a ViewSet maps actions (list, create, retrieve, update, partial_update,
     # destroy) to functions already defined in the ViewSet class, and we only need to define the functions for the actions we want to handle
@@ -66,3 +69,34 @@ class HelloViewSet(viewsets.ViewSet):
         ]
 
         return Response({"message": "Hello!", "a_viewset": a_viewset})
+
+    def create(self, request):
+        """Create a new hello message"""
+        serializer = self.serializer_class(data=request.data)
+
+        if serializer.is_valid():
+            name = serializer.validated_data.get("name")
+            phone_number = serializer.validated_data.get("phone_number")
+            is_active = serializer.validated_data.get("is_active")
+            message = f"Hello {name}! Your phone number is {phone_number} and you are {'active' if is_active else 'not active'}."
+            return Response({"message": message})
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def retrieve(
+        self, request, pk=None
+    ):  # The pk is the primary key of the object to retrieve, and it is passed as an argument to the function, and it is used to get the object from the database. It is passed in the URL of the request, and it is used to identify the object to retrieve.
+        """Handle getting an object by its ID"""
+        return Response({"http_method": "GET"})
+
+    def update(self, request, pk=None):
+        """Handle updating an object"""
+        return Response({"http_method": "PUT"})
+
+    def partial_update(self, request, pk=None):
+        """Handle updating part of an object"""
+        return Response({"http_method": "PATCH"})
+
+    def destroy(self, request, pk=None):
+        """Handle removing an object"""
+        return Response({"http_method": "DELETE"})
