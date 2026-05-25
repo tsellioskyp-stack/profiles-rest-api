@@ -4,6 +4,10 @@ from profiles_api import views
 
 router = DefaultRouter()
 router.register("hello-viewset", views.HelloViewSet, basename="hello-viewset")
+router.register("bye-bye-viewset", views.ByeByeViewSet, basename="bye-bye-viewset")
+router.register(
+    "profile", views.UserProfileViewSet, basename="profile"
+)  # This registers the UserProfileViewSet with the router, which automatically generates URL patterns for the viewset. The basename argument is optional in this case because the viewset is a ModelViewSet and it can automatically determine the base name from the queryset. The generated URL patterns for the UserProfileViewSet will be prefixed with "profile". For example, the list action of the UserProfileViewSet will be accessible at http://localhost:8000/api/profile/ and the detail action for a specific user profile will be accessible at http://localhost:8000/api/profile/<id>/, where <id> is the unique identifier of the user profile.
 
 urlpatterns = [
     path("hello-view/", views.HelloApiView.as_view()),

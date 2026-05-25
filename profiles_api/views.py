@@ -4,6 +4,7 @@ from rest_framework import reverse, status
 from rest_framework import viewsets
 
 from profiles_api import serializers
+from profiles_api import models
 
 
 class HelloApiView(APIView):
@@ -100,3 +101,40 @@ class HelloViewSet(viewsets.ViewSet):
     def destroy(self, request, pk=None):
         """Handle removing an object"""
         return Response({"http_method": "DELETE"})
+
+
+class ByeByeViewSet(viewsets.ViewSet):
+    """Test API ViewSet"""
+
+    serializer_class = (
+        serializers.ByeByeSerializer
+    )  # THis creates a form in the webpage, a "window" to type in
+
+    def list(self, request):
+        """Return a bye message"""
+        a_viewset = [
+            "Uses actions (list, create, retrieve, update, partial_update)",
+            "Automatically maps to URLs using Routers",
+            "Provides more functionality with less code",
+        ]
+
+        return Response({"message": "Bye!", "a_viewset": a_viewset})
+
+    def create(self, request):
+        """Create a new bye message"""
+        serializer = self.serializer_class(data=request.data)
+
+        if serializer.is_valid():
+            name = serializer.validated_data.get("name")
+            message = f"Bye {name}!"
+            return Response({"message": message})
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    """Handle creating, creating and updating profiles"""
+
+    serializer_class = serializers.UserProfileSerializer
+    queryset = models.UserProfile.objects.all()
+    # DRF takes care of all the CRUD operations for us, and we only need to specify the serializer class and the queryset for the viewset. The ModelViewSet class provides default implementations for the list, create, retrieve, update, partial_update, and destroy actions, which are all we need to handle the CRUD operations for our user profiles. By specifying the serializer class and the queryset, we can easily create an API that allows us to create, retrieve, update, and delete user profiles without having to write any additional code for these operations.
