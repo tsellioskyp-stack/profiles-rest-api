@@ -2,9 +2,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import reverse, status
 from rest_framework import viewsets
+from rest_framework.authentication import TokenAuthentication
 
 from profiles_api import serializers
 from profiles_api import models
+from profiles_api import permissions
 
 
 class HelloApiView(APIView):
@@ -138,3 +140,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.UserProfileSerializer
     queryset = models.UserProfile.objects.all()
     # DRF takes care of all the CRUD operations for us, and we only need to specify the serializer class and the queryset for the viewset. The ModelViewSet class provides default implementations for the list, create, retrieve, update, partial_update, and destroy actions, which are all we need to handle the CRUD operations for our user profiles. By specifying the serializer class and the queryset, we can easily create an API that allows us to create, retrieve, update, and delete user profiles without having to write any additional code for these operations.
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (
+        permissions.UpdateOwnProfile,
+    )  # This line specifies the permission classes that will be used to determine whether a user has permission to perform certain actions on the user profiles. In this case, we are using a custom permission class called UpdateOwnProfile, which is defined in the permissions.py file. This permission class allows users to edit their own profile, but not other users' profiles. By including this permission class in the UserProfileViewSet, we can ensure that users can only update their own profiles and not those of other users, providing an additional layer of security for our API.
