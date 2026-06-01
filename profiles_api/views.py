@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import reverse, status
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
+from rest_framework import filters
 
 from profiles_api import serializers
 from profiles_api import models
@@ -144,3 +145,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (
         permissions.UpdateOwnProfile,
     )  # This line specifies the permission classes that will be used to determine whether a user has permission to perform certain actions on the user profiles. In this case, we are using a custom permission class called UpdateOwnProfile, which is defined in the permissions.py file. This permission class allows users to edit their own profile, but not other users' profiles. By including this permission class in the UserProfileViewSet, we can ensure that users can only update their own profiles and not those of other users, providing an additional layer of security for our API.
+    filter_backends = (
+        filters.SearchFilter,
+    )  # This line specifies the filter backends that will be used to enable searching and filtering of user profiles in the API. In this case, we are using the SearchFilter backend provided by Django REST Framework, which allows us to search for user profiles based on specific fields. By including this filter backend in the UserProfileViewSet, we can enable searching for user profiles based on their name and email fields, making it easier for clients to find specific user profiles in the API. The search_fields attribute specifies the fields that can be searched, and in this case, we are allowing searching by name and email, which are common fields that users may want to search for when looking for specific user profiles. On the URL, it will be something like http://localhost:8000/api/profile/?search=John, and it will return all the user profiles that have "John" in their name or email.
+    search_fields = ("name", "email")
