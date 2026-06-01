@@ -4,6 +4,8 @@ from rest_framework import reverse, status
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import filters
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.settings import api_settings
 
 from profiles_api import serializers
 from profiles_api import models
@@ -149,3 +151,10 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         filters.SearchFilter,
     )  # This line specifies the filter backends that will be used to enable searching and filtering of user profiles in the API. In this case, we are using the SearchFilter backend provided by Django REST Framework, which allows us to search for user profiles based on specific fields. By including this filter backend in the UserProfileViewSet, we can enable searching for user profiles based on their name and email fields, making it easier for clients to find specific user profiles in the API. The search_fields attribute specifies the fields that can be searched, and in this case, we are allowing searching by name and email, which are common fields that users may want to search for when looking for specific user profiles. On the URL, it will be something like http://localhost:8000/api/profile/?search=John, and it will return all the user profiles that have "John" in their name or email.
     search_fields = ("name", "email")
+
+
+class UserLoginApiView(ObtainAuthToken):
+    """Handle creating user authentication tokens"""
+
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+    # This line specifies the renderer classes that will be used to render the response for the user login API view. By default, the ObtainAuthToken view provided by Django REST Framework does not include any renderer classes, which means that it will not render any response when a user logs in. By setting the renderer_classes attribute to api_settings.DEFAULT_RENDERER_CLASSES, we are enabling the default renderer classes provided by Django REST Framework, which include JSONRenderer and BrowsableAPIRenderer. This allows us to receive a response in JSON format when a user logs in, which can be useful for clients that need to parse the response and extract the authentication token for subsequent API requests. Additionally, it also allows us to use the browsable API interface provided by Django REST Framework, which can be helpful for testing and debugging our API during development.

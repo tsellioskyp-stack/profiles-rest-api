@@ -11,6 +11,7 @@ router.register(
 
 urlpatterns = [
     path("hello-view/", views.HelloApiView.as_view()),
+    path("login/", views.UserLoginApiView.as_view(), name="login"),
     path("", include(router.urls)),
 ]
 # This line defines a URL pattern for the "hello-view/" endpoint. When a request is made to this URL, it will be handled by the HelloApiView
