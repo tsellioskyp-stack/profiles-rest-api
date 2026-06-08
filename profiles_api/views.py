@@ -1,4 +1,4 @@
-from rest_framework.views import APIView
+from rest_framework.views import APIView, PermissionDenied
 from rest_framework.response import Response
 from rest_framework import reverse, status
 from rest_framework import viewsets
@@ -6,6 +6,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework import filters
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from profiles_api import serializers
 from profiles_api import models
@@ -158,3 +159,22 @@ class UserLoginApiView(ObtainAuthToken):
 
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
     # This line specifies the renderer classes that will be used to render the response for the user login API view. By default, the ObtainAuthToken view provided by Django REST Framework does not include any renderer classes, which means that it will not render any response when a user logs in. By setting the renderer_classes attribute to api_settings.DEFAULT_RENDERER_CLASSES, we are enabling the default renderer classes provided by Django REST Framework, which include JSONRenderer and BrowsableAPIRenderer. This allows us to receive a response in JSON format when a user logs in, which can be useful for clients that need to parse the response and extract the authentication token for subsequent API requests. Additionally, it also allows us to use the browsable API interface provided by Django REST Framework, which can be helpful for testing and debugging our API during development.
+
+
+class ProfileFeedItemViews(viewsets.ModelViewSet):
+    """Handles creating, reading and updating profile feed items"""
+
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = serializers.ProfileFeedItemSerializer
+    queryset = models.ProfileFeedItem.objects.all()
+    permission_classes = (
+        IsAuthenticatedOrReadOnly,
+        permissions.UpdateOwnStatus,
+    )
+
+    def perform_create(self, serializer):
+        """Sets the user profile to the logged in user"""
+        serializer.save(user_profile=self.request.user)
+        # This method is called when a new profile feed item is created through the API. It takes the serializer as an argument, which contains the data for the new profile feed item being created. The method then calls the save() method on the serializer, passing in the user_profile argument with the value of self.request.user. This sets the user_profile field of the new profile feed item to the currently logged-in user, ensuring that each status update is associated with a specific user profile in our API. By doing this, we can easily track which user created each status update and provide personalized content for each user based on their profile information.
+
+        # If the user is not authenticated or does not have permission to create a profile feed item

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
+from profiles_project import settings
 
 
 class UserProfileManager(BaseUserManager):
@@ -77,3 +78,22 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         """Return string representation of our user"""
         return self.email
+
+
+class ProfileFeedItem(models.Model):
+    """Profile status update"""
+
+    user_profile = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )  # This line defines a foreign key relationship to the user profile model. It means that each profile feed item is associated with a specific user profile. The settings.AUTH_USER_MODEL is used to reference the custom user model defined in the project, which allows for flexibility in case the user model is changed in the future. The on_delete=models.CASCADE argument specifies that if a user profile is deleted, all associated profile feed items will also be deleted (cascading delete).
+    status_text = models.CharField(
+        max_length=255
+    )  # A character field to store the text of the status update, with a maximum length of 255 characters.
+    created_on = models.DateTimeField(
+        auto_now_add=True
+    )  # A datetime field that automatically sets the value to the current date and time when a new profile feed item is created.
+
+    def __str__(self):
+        """Return the model as a string"""
+        return self.status_text
